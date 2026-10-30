@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AI Studio 포트폴리오</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235B34FF'/%3E%3Ccircle cx='10' cy='16' r='4' fill='%23EDFF3A'/%3E%3Ccircle cx='22' cy='16' r='4' fill='%2322E6A8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Noto+Sans+KR:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#170B3B; --violet:#5B34FF; --lemon:#EDFF3A; --mint:#22E6A8; --coral:#FF5A3C;
+  --pink:#FF4FD8; --sky:#3AB8FF; --white:#fff; --lime:#9BEA1C; --red:#E8203F;
+  --kr:'Noto Sans KR',sans-serif; --la:'Bricolage Grotesque','Noto Sans KR',sans-serif; --mo:'Space Mono','Noto Sans KR',monospace;
+  --pad:clamp(16px,5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--violet);scroll-padding-top:64px}
+body{font:400 17px/1.6 var(--kr);color:var(--ink);word-break:keep-all;overflow-x:clip;background:var(--violet)}
+img,video{display:block;max-width:100%}
+.mo{font-family:var(--mo);letter-spacing:.02em}
+.la{font-family:var(--la)}
+
+/* 상단 바 — 자기 띠를 가진 sticky라 내용 위에 겹치지 않는다 */
+.top{position:sticky;z-index:50;top:0;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;background:var(--ink);border-bottom:3px solid var(--lemon)}
+.top>*{background:var(--white);color:var(--ink);border-radius:999px;padding:5px 14px;font:700 13px/1.4 var(--mo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.top nav{display:flex;gap:6px;background:none;padding:0;overflow:visible}
+.top nav a{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--c,var(--white));color:var(--ink);text-decoration:none;font:700 12px/1 var(--mo);border:2px solid var(--white)}
+.top nav a:hover{transform:translateY(-2px)}
+.top .rec{display:flex;align-items:center;gap:8px}
+.top .rec::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--coral);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ── 첫 화면: 파이프라인 캔버스 ── */
+.hero{position:relative;min-height:calc(100svh - 53px);padding:48px var(--pad) 56px;color:var(--white);overflow:hidden;
+  background-color:var(--violet);
+  background-image:radial-gradient(rgba(255,255,255,.28) 1.6px,transparent 1.8px);
+  background-size:28px 28px;animation:pan 14s linear infinite}
+@keyframes pan{to{background-position:28px 56px}}
+.hero .kick{font:700 13px/1.4 var(--mo);letter-spacing:.14em;color:var(--lemon);text-transform:uppercase}
+.hero h1{font:900 clamp(34px,6.4vw,100px)/1.06 var(--kr);letter-spacing:-.035em;margin:14px 0 18px;max-width:15em}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+.hero h1 .ln>span{display:inline-block;transform:translateY(105%);animation:rise .9s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:var(--d)}
+@keyframes rise{to{transform:none}}
+.hl{background:linear-gradient(var(--lemon),var(--lemon)) 0 60%/0% 92% no-repeat;animation:mark .7s 1.1s ease-out forwards;color:inherit;padding:0 .08em;margin:0 -.08em;transition:color .3s}
+.hl{animation:mark .7s 1.1s ease-out forwards,ink .2s 1.35s forwards}
+.hl.m{background-image:linear-gradient(var(--mint),var(--mint));animation-delay:1.35s,1.6s}
+@keyframes mark{to{background-size:100% 92%}}
+@keyframes ink{to{color:var(--ink)}}
+.hero .sub{font-size:clamp(16px,1.35vw,20px);font-weight:700;max-width:46em;opacity:0;animation:fade .6s 1.2s forwards}
+@keyframes fade{to{opacity:1}}
+
+/* 노드 그래프 */
+.graph{position:relative;margin-top:clamp(56px,7vh,72px);display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.5fr);
+  grid-template-areas:"p g r o" "s b c o";gap:clamp(40px,6vh,64px) clamp(40px,4.4vw,72px)}
+.graph svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.w{fill:none;stroke:rgba(255,255,255,.7);stroke-width:3;stroke-dasharray:3 9;animation:flow .8s linear infinite}
+.pk{fill:none;stroke:var(--lemon);stroke-width:6;stroke-linecap:round;stroke-dasharray:6 94;stroke-dashoffset:100;animation:pk 2.2s linear infinite;animation-delay:var(--d,0s);filter:drop-shadow(0 0 6px var(--lemon))}
+.pk.back{stroke:var(--coral);filter:drop-shadow(0 0 6px var(--coral))}
+@keyframes flow{to{stroke-dashoffset:-24}}
+@keyframes pk{to{stroke-dashoffset:0}}
+.nd{position:relative;z-index:1;background:var(--white);color:var(--ink);border-radius:18px;padding:12px 14px 14px;box-shadow:0 8px 0 var(--ink);min-width:0;
+  opacity:0;transform:scale(.6) translateY(30px);animation:pop .6s cubic-bezier(.3,1.5,.5,1) forwards;animation-delay:var(--d)}
+@keyframes pop{to{opacity:1;transform:none}}
+.nd i{display:block;font:700 11px/1.3 var(--mo);font-style:normal;letter-spacing:.1em;padding:3px 8px;border-radius:6px;background:var(--c);width:max-content;max-width:100%}
+.nd b{display:block;font:900 clamp(16px,1.5vw,22px)/1.2 var(--kr);margin:8px 0 4px;letter-spacing:-.02em}
+.nd em{display:block;font:400 12px/1.4 var(--mo);font-style:normal;opacity:.75}
+.n-p{grid-area:p;--c:var(--lemon)} .n-g{grid-area:g;--c:var(--mint)} .n-r{grid-area:r;--c:var(--coral)}
+.n-s{grid-area:s;--c:var(--sky)} .n-b{grid-area:b;--c:var(--pink)} .n-c{grid-area:c;--c:#FFB13A}
+.n-o{grid-area:o;--c:var(--lemon);align-self:center}
+.bar{display:block;height:8px;border-radius:4px;background:#E7E3F7;margin:8px 0 6px;overflow:hidden}
+.bar u{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--sky));animation:fill 3.2s linear infinite}
+@keyframes fill{0%{width:0}85%,100%{width:100%}}
+.stamp{display:inline-block;margin-top:6px;font:700 14px/1 var(--mo);letter-spacing:.12em;padding:6px 10px;border:3px solid currentColor;border-radius:8px;transform:rotate(-6deg)}
+.stamp.no{color:#E8202B}.stamp.ok{color:#0BA572}
+.stamp.hit{animation:slam .35s cubic-bezier(.3,1.8,.5,1)}
+@keyframes slam{from{transform:rotate(-6deg) scale(2.2);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:1}}
+.view{position:relative;margin-top:10px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--ink)}
+.view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
+.view img.on{opacity:1;animation:denoise 2.4s ease-out}
+@keyframes denoise{0%{filter:blur(18px) saturate(2.4) contrast(.6)}60%{filter:blur(2px) saturate(1.3)}100%{filter:none}}
+.view .noise{position:absolute;inset:-50%;width:200%;height:200%;opacity:0;mix-blend-mode:overlay;pointer-events:none}
+.view .noise.go{animation:nz 2.4s ease-out}
+@keyframes nz{0%{opacity:.9}100%{opacity:0}}
+.view .tag{position:absolute;left:8px;bottom:8px;z-index:2;font:700 11px/1.3 var(--mo);background:var(--lemon);color:var(--ink);padding:3px 7px;border-radius:5px}
+.n-o .meta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font:400 12px/1.4 var(--mo)}
+.hero .legend{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px 20px;font:700 13px/1.4 var(--mo);opacity:0;animation:fade .6s 2.4s forwards}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend span::before{content:"";width:22px;height:5px;border-radius:3px;background:var(--lemon)}
+.legend span.b::before{background:var(--coral)}
+
+/* ── 섹션 공통 ── */
+.sec{position:relative;padding:clamp(72px,10vh,120px) var(--pad);overflow:hidden}
+.prog{height:14px;background:repeating-linear-gradient(90deg,var(--ink) 0 18px,transparent 18px 26px);opacity:.9}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .7s,transform .7s cubic-bezier(.2,.9,.2,1)}
+.rv.in{opacity:1;transform:none}
+.eyebrow{font:700 13px/1.4 var(--mo);letter-spacing:.14em;text-transform:uppercase}
+.h2{font:900 clamp(32px,5vw,76px)/1.08 var(--kr);letter-spacing:-.035em;margin:12px 0 18px}
+
+/* ── 작품 1: 본편 ── */
+.work{background:var(--bg,var(--coral));color:var(--ink)}
+.w1{--bg:var(--coral)}
+.work .head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:20px 40px}
+.work .num{font:800 clamp(80px,14vw,220px)/.8 var(--la);color:var(--white);letter-spacing:-.05em}
+.work .title{font:800 clamp(36px,6.4vw,104px)/.95 var(--la);letter-spacing:-.04em;margin:10px 0 6px}
+.work .title.kr{font:900 clamp(34px,5.6vw,92px)/1.05 var(--kr);letter-spacing:-.045em}
+.work .title small{display:block;font:900 clamp(22px,2.6vw,40px)/1.2 var(--kr);letter-spacing:-.02em;margin-top:10px}
+.work.dark{color:var(--white)} .work.dark .chip{border-color:var(--white)} .work.dark .fcap{color:var(--ink)}
+/* 세로 영상(월급햄스터): 영상과 설명을 나란히 */
+.vwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px);gap:clamp(24px,4vw,64px);align-items:center;margin-top:clamp(28px,5vh,56px)}
+.vwrap .player{margin-top:0}
+.player.v video{aspect-ratio:9/16;object-fit:cover}
+.big3{display:grid;gap:14px}
+.big3 div{background:var(--white);border:3px solid var(--ink);border-radius:20px;padding:14px 20px;box-shadow:0 8px 0 var(--ink)}
+.big3 b{display:block;font:800 clamp(44px,5vw,80px)/1 var(--la);letter-spacing:-.04em}
+.big3 span{font-weight:700;font-size:15px}
+/* 작품 사이 흐르는 띠 */
+.marq{overflow:hidden;background:var(--ink);color:var(--c,var(--lemon));font:800 clamp(22px,2.6vw,40px)/1 var(--la);letter-spacing:-.02em;padding:14px 0;white-space:nowrap}
+.marq span{display:inline-block;animation:marq 22s linear infinite;padding-right:1em}
+@keyframes marq{to{transform:translateX(-50%)}}
+/* 거절본 이미지가 없을 때 쓰는 기록 카드 */
+.cmp.rec .bf{position:absolute;inset:0;display:grid;align-content:center;gap:10px;padding:clamp(14px,4vw,60px);padding-right:calc(50% + 34px);background:repeating-linear-gradient(-45deg,#2A1A5E 0 16px,#22144F 16px 32px);color:var(--white);text-align:left}
+.cmp.rec .bf q{font:900 clamp(18px,2.6vw,40px)/1.25 var(--kr);letter-spacing:-.03em;quotes:"“" "”";max-width:16em}
+.cmp.rec .bf small{font:700 clamp(11px,1vw,14px)/1.4 var(--mo);color:var(--lemon)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{font:700 13px/1.3 var(--mo);padding:6px 12px;border-radius:999px;background:var(--white);color:var(--ink);border:2px solid var(--ink)}
+.chip.k{background:var(--ink);color:var(--lemon)}
+.lede{font-size:clamp(17px,1.4vw,21px);font-weight:700;max-width:40em;margin-top:22px}
+.player{margin-top:clamp(28px,5vh,56px);background:var(--ink);border-radius:22px;padding:12px;box-shadow:0 14px 0 rgba(23,11,59,.35)}
+.player .bar2{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;color:var(--white);font:700 12px/1.4 var(--mo);padding:4px 6px 12px}
+.player .bar2 b{color:var(--lemon)}
+.player video{width:100%;aspect-ratio:16/9;border-radius:12px;background:#000;object-fit:cover}
+.fcap{margin-top:14px;font-weight:700;font-size:clamp(15px,1.2vw,18px);background:var(--white);display:inline-block;padding:8px 14px;border-radius:12px}
+
+/* ── 과정 증거 ── */
+.proof{background:var(--pbg,var(--lemon))}
+.cmp{position:relative;margin-top:28px;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:var(--ink);--x:50%;box-shadow:0 14px 0 var(--ink);touch-action:pan-y}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cmp .bf{clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+.cmp .hd{position:absolute;top:0;bottom:0;left:var(--x);width:6px;margin-left:-3px;background:var(--white);box-shadow:0 0 0 3px var(--ink)}
+.cmp .hd::after{content:"⟷";position:absolute;top:50%;left:50%;translate:-50% -50%;width:54px;height:54px;border-radius:50%;background:var(--white);border:4px solid var(--ink);display:grid;place-items:center;font:700 22px/1 var(--mo)}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.cmp .lb{position:absolute;bottom:14px;z-index:2;font:700 clamp(11px,1.1vw,15px)/1.3 var(--mo);padding:6px 10px;border-radius:8px;letter-spacing:.06em}
+.cmp .lb.l{left:14px;background:#E8202B;color:var(--white)}
+.cmp .lb.r{right:14px;background:#0BA572;color:var(--white)}
+.why{margin-top:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.why>div{background:var(--white);border-radius:18px;padding:16px 20px;border:3px solid var(--ink)}
+.why b{display:block;font:700 13px/1.3 var(--mo);letter-spacing:.1em;margin-bottom:6px}
+.why .no b{color:#E8202B}.why .ok b{color:#0BA572}
+.why p{font-weight:700;font-size:clamp(15px,1.2vw,18px)}
+
+.log{margin-top:clamp(48px,8vh,88px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.tile{background:var(--violet);color:var(--white);border-radius:22px;padding:22px 24px 24px;min-width:0;box-shadow:0 10px 0 var(--ink)}
+.tile:nth-child(2){background:var(--ink)} .tile:nth-child(3){background:var(--pink);color:var(--ink)}
+.tile:nth-child(4){background:var(--mint);color:var(--ink)} .tile:nth-child(5){background:var(--sky);color:var(--ink)}
+.tile:nth-child(6){background:var(--coral);color:var(--ink)}
+.tile .k{font:700 13px/1.3 var(--mo);letter-spacing:.12em;opacity:.85}
+.tile .v{font:800 clamp(48px,5.6vw,92px)/1 var(--la);letter-spacing:-.04em;margin:12px 0 10px;white-space:nowrap}
+.tile .v small{font:900 .38em/1 var(--kr);letter-spacing:-.02em;margin-left:4px}
+.tile p{font-weight:700;font-size:15px;line-height:1.5}
+
+/* ── AI가 틀린 것, 사람이 잡은 것 ── */
+.catch{background:var(--mint)}
+.cards{display:grid;gap:clamp(28px,5vh,48px);margin-top:28px}
+.card{background:var(--white);border-radius:28px;border:4px solid var(--ink);box-shadow:0 14px 0 var(--ink);padding:clamp(18px,2.4vw,34px);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:clamp(20px,3vw,44px);align-items:center}
+.card .no{font:800 clamp(56px,7vw,110px)/.85 var(--la);letter-spacing:-.05em;color:var(--violet)}
+.card h3{font:900 clamp(24px,2.6vw,40px)/1.15 var(--kr);letter-spacing:-.03em;margin:10px 0 14px}
+.card .src{font:700 12px/1.3 var(--mo);letter-spacing:.08em;opacity:.7}
+.step{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:start;margin-top:10px;font-weight:700;font-size:clamp(15px,1.15vw,17px)}
+.step .t{font:700 12px/1 var(--mo);padding:6px 8px;border-radius:6px;color:var(--white);margin-top:2px}
+.step .t.ai{background:#E8202B}.step .t.hu{background:var(--violet)}.step .t.ok{background:#0BA572}
+.pics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pic{position:relative;border-radius:16px;overflow:hidden;background:var(--ink);aspect-ratio:16/9}
+.pic img{width:100%;height:100%;object-fit:cover}
+.pic .s{position:absolute;left:10px;top:10px;font:700 12px/1.2 var(--mo);padding:5px 8px;border-radius:6px;color:var(--white)}
+.pic .s.no{background:#E8202B}.pic .s.ok{background:#0BA572}
+.pic.x{display:grid;place-items:center;background:repeating-linear-gradient(-45deg,#ECE8FF 0 14px,#fff 14px 28px);color:var(--ink);text-align:center;padding:20px;font-weight:900;font-size:clamp(14px,1.2vw,18px)}
+.pic.x span{display:block;font:700 12px/1.4 var(--mo);margin-top:6px;opacity:.75}
+.pic.x{padding-top:40px}
+.pic .s,.stampbig{transform:rotate(-4deg)}
+.rv.in .pic .s{animation:slam .45s .3s cubic-bezier(.3,1.8,.5,1) both}
+/* 캔 단면 도면 */
+.dwg{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:12px;align-items:stretch}
+.dwg .pic{aspect-ratio:auto;min-height:0}
+.dwg .pic img{position:absolute;inset:0}
+.dwg svg{width:100%;height:100%;background:var(--ink);border-radius:16px;display:block}
+.dwg path,.dwg line{fill:none;stroke-linecap:round}
+.dwg .cut{stroke:var(--lemon);stroke-width:2.6;stroke-dasharray:1000;stroke-dashoffset:1000}
+.dwg .dim{stroke:var(--mint);stroke-width:1.4;stroke-dasharray:300;stroke-dashoffset:300}
+.dwg text{font:700 13px var(--mo);fill:var(--white);opacity:0;paint-order:stroke;stroke:var(--ink);stroke-width:4px;stroke-linejoin:round}
+.dwg text.m{fill:var(--mint)} .dwg text.y{fill:var(--lemon)}
+.rv.in .dwg .cut{animation:draw 1.4s .1s ease-out forwards}
+.rv.in .dwg .dim{animation:draw .9s 1s ease-out forwards}
+.rv.in .dwg text{animation:fade .4s 1.3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+.foot{background:var(--ink);color:var(--white);padding:56px var(--pad) 72px;display:grid;gap:12px;font-weight:700}
+.foot .mo{color:var(--lemon);font-size:13px}
+
+/* ── 휴대폰 ── */
+@media (max-width:820px){
+  .graph{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"p g" "r b" "s c" "o o";gap:34px 26px}
+  .nd{padding:10px 11px 12px;border-radius:14px}
+  .nd em{font-size:11px}
+  .work .head{grid-template-columns:1fr}
+  .work .num{order:-1}
+  .why,.log{grid-template-columns:1fr}
+  .log{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .tile{padding:16px 16px 18px}
+  .tile .v{font-size:clamp(34px,10vw,56px)}
+  .card{grid-template-columns:1fr}
+  .vwrap{grid-template-columns:1fr}
+  .vwrap .player.v{max-width:340px;width:100%;margin:0 auto;order:-1}
+  .top>*{font-size:11px;padding:5px 11px}
+}
+@media (max-width:600px){
+  .cmp .xl{display:none}
+  .dwg{grid-template-columns:1fr}
+  .dwg .pic{aspect-ratio:16/9}
+  .top .ct{display:none}
+  .top nav a{width:26px;height:26px;font-size:11px}
+  /* 첫 화면: 출력 창을 문구 바로 아래로 올려 한 화면 안에 */
+  .hero{padding-top:22px;padding-bottom:40px}
+  .hero h1{margin:8px 0 10px;font-size:clamp(30px,8.6vw,40px)}
+  .hero .sub{font-size:14px;line-height:1.55}
+  .graph{margin-top:26px;grid-template-areas:"o o" "p g" "r b" "s c";gap:30px 22px}
+  .n-o{padding:8px 10px 10px}
+  .n-o .view{margin-top:6px}
+}
+@media (max-width:420px){ .pics{gap:8px} .pic .s{font-size:10px;left:6px;top:6px} .pic.x{font-size:12px;padding:30px 8px 8px;line-height:1.3} .pic.x span{font-size:10px;margin-top:2px} .tile p{font-size:13px} .tile .k{font-size:11px} }
+
+/* ── 동작 줄이기 ── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero h1 .ln>span,.nd,.rv{transform:none!important;opacity:1!important}
+  .hero .sub,.hero .legend{opacity:1}
+  .hl{background-size:100% 92%;color:var(--ink)}
+  .pk{display:none}
+  .dwg .cut,.dwg .dim{stroke-dashoffset:0} .dwg text{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="top"><span class="rec">AI STUDIO</span>
+  <nav aria-label="작품 바로가기"><a href="#work-1" style="--c:var(--coral)">01</a><a href="#work-2" style="--c:var(--pink)">02</a><a href="#work-3" style="--c:var(--sky)">03</a><a href="#work-4" style="--c:var(--lime)">04</a><a href="#work-5" style="--c:#FFB13A">05</a></nav>
+  <span class="ct">정윤상 · wjddbstkddla@naver.com</span></div>
+
+<!-- 첫 화면 -->
+<header class="hero" id="top">
+  <p class="kick">Generative AI Content Creator — Portfolio</p>
+  <h1>
+    <span class="ln"><span style="--d:.1s"><mark class="hl">생성 모델 운영</mark>부터</span></span>
+    <span class="ln"><span style="--d:.25s"><mark class="hl m">3D·합성</mark>까지, 한 사람이.</span></span>
+  </h1>
+  <p class="sub">ComfyUI·MiniMax-H3로 영상을 생성하고, Blender로 제품과 엔드카드를 직접 만들고, ACE-Step 음악과 편집·합성까지 묶어 광고 한 편을 끝냅니다. 모델이 틀린 곳은 사람이 프레임 단위로 잡습니다.</p>
+
+  <div class="graph" id="graph" aria-label="제작 파이프라인: 콘티, 생성, 사람 검수, Blender 3D, 음악, 합성, 출력">
+    <svg id="wires" aria-hidden="true"></svg>
+    <div class="nd n-p" id="n-p" style="--d:.5s"><i>01 BRIEF</i><b>콘티·프롬프트</b><em>한 사람의 하루 · 20초</em></div>
+    <div class="nd n-g" id="n-g" style="--d:.65s"><i>02 GENERATE</i><b>ComfyUI · MiniMax-H3</b><span class="bar"><u></u></span><em>1344×768 · 124f · 32 steps</em></div>
+    <div class="nd n-r" id="n-r" style="--d:.8s"><i>03 REVIEW</i><b>사람 검수</b><span class="stamp no" id="stamp">REJECT</span></div>
+    <div class="nd n-s" id="n-s" style="--d:.95s"><i>04 SOUND</i><b>ACE-Step</b><em>로컬 음악 생성</em></div>
+    <div class="nd n-b" id="n-b" style="--d:1.1s"><i>05 3D</i><b>Blender</b><em>제품·엔드카드 모델링</em></div>
+    <div class="nd n-c" id="n-c" style="--d:1.25s"><i>06 COMPOSITE</i><b>편집·합성</b><em>ffmpeg · HTML/Canvas · Python</em></div>
+    <div class="nd n-o" id="n-o" style="--d:1.4s"><i>07 OUTPUT</i>
+      <div class="view" id="view">
+        <img src="media/take-a.webp" alt="v7 장면 — 헤드폰을 쓴 인물 (AI 생성 가상 인물)" class="on">
+        <img src="media/take-b.webp" alt="v7 장면 — 계단을 오르는 인물 (AI 생성)">
+        <img src="media/take-c.webp" alt="v7 장면 — 옥상의 인물 (AI 생성)">
+        <img src="media/take-d.webp" alt="v7 장면 — 옥상에서 친구들과 인사 (AI 생성)">
+        <svg class="noise" aria-hidden="true"><filter id="nf"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2"/></filter><rect width="100%" height="100%" filter="url(#nf)"/></svg>
+        <span class="tag">AI 생성 장면</span>
+      </div>
+      <div class="meta"><span>v7.mp4</span><span id="takeno">TAKE 1/4</span></div>
+    </div>
+  </div>
+  <p class="legend"><span>생성 → 검수 → 합성 흐름</span><span class="b">검수 탈락 → 다시 생성</span></p>
+</header>
+
+<div class="prog" style="background-color:var(--coral)"></div>
+
+<!-- 작품 1 -->
+<section class="sec work w1" id="work-1">
+  <div class="head rv">
+    <div>
+      <p class="eyebrow">Work 01 · AI 영상 광고 시안</p>
+      <h2 class="title">OWN YOUR TEMPO<small>헤드폰 실사판 v7</small></h2>
+      <div class="chips">
+        <span class="chip k">Nothing Headphone (1) Pro</span>
+        <span class="chip">실제 브랜드의 비공식 콘셉트</span>
+        <span class="chip">AI 생성 영상 · 가상 인물</span>
+      </div>
+    </div>
+    <div class="num" aria-hidden="true">01</div>
+  </div>
+  <p class="lede rv">헤드폰을 쓴 한 사람의 하루를 20초로 담은 AI 영상 광고 시안이에요. 거리·계단·옥상, 레코드점·인쇄소·세탁소·기차·농구장까지 장소와 이야기를 바꿔 가며 7편을 만들었고, 이 과정에서 얻은 결론으로 모션그래픽 본편을 다시 만들었어요.</p>
+  <div class="player rv">
+    <div class="bar2"><span><b>OUTPUT</b> · v7.mp4</span><span>1280×720 · 24fps · 480f · 20s</span></div>
+    <video class="film" src="../../media/headphone-film/v7.mp4" poster="../../media/headphone-film/v7-poster.jpg" controls muted playsinline loop preload="metadata"></video>
+  </div>
+  <p class="fcap rv">v7 20초 · 1280×720 · 소리 있음 — AI 생성 영상, 끝부분의 공식 제품 사진은 직접 만든 3D 엔드카드로 교체</p>
+</section>
+
+<div class="prog" style="background-color:var(--lemon)"></div>
+
+<!-- 과정 증거 -->
+<section class="sec proof" id="proof">
+  <p class="eyebrow rv">Process evidence</p>
+  <h2 class="h2 rv">거절된 테이크와<br>살아남은 결론</h2>
+  <div class="cmp rv" id="cmp">
+    <img src="media/adopt-motion.webp" alt="채택: 3D 모션그래픽 본편 — 패들을 밀면 다음 곡, 파란 세계로 바뀌는 장면">
+    <img class="bf" src="media/reject-v7.webp" alt="거절: AI 실사 v7 — 옥상에서 춤추는 인물 (AI 생성)">
+    <div class="hd" aria-hidden="true"></div>
+    <span class="lb l">REJECT<span class="xl"> · AI 실사 v7</span></span><span class="lb r">ADOPT<span class="xl"> · 3D 모션그래픽</span></span>
+    <input type="range" min="0" max="100" value="50" aria-label="거절본과 채택본 비교 위치">
+  </div>
+  <div class="why rv">
+    <div class="no"><b>왜 거절됐나</b><p>v7: 9초 배경 확장, 뜬금없는 춤·친구, 인물의 AI 질감. 실사 시안 7편 모두 "느리고, 장소만 바뀌고, 제품과 변화의 인과가 없다"는 판정.</p></div>
+    <div class="ok"><b>무엇으로 바꿨나</b><p>사람 대신 제품의 실제 조작(누르기·길게·돌리기·패들)이 장면을 바꾸는 3D 모션그래픽 본편. 제품은 Blender로 직접 모델링.</p></div>
+  </div>
+
+  <div class="log">
+    <div class="tile rv"><p class="k">제작 기간</p><p class="v"><span data-n="4">4</span><small>일</small></p><p>10.09 v6 착수 → 10.12 v7 납품. 사이에 v6 검토 PDF 7쪽을 반영.</p></div>
+    <div class="tile rv"><p class="k">본편</p><p class="v"><span data-n="480">480</span><small>프레임</small></p><p>20초 · 1280×720 · 24fps · 9컷</p></div>
+    <div class="tile rv"><p class="k">v7 새 생성</p><p class="v"><span data-n="7258">7,258</span><small>초</small></p><p>새 생성 테이크 5개의 실제 실행 시간 합. 테이크당 1344×768 · 124프레임 · 32스텝.</p></div>
+    <div class="tile rv"><p class="k">비용</p><p class="v">LOCAL</p><p>영상(MiniMax-H3)·음악(ACE-Step) 모두 로컬 GPU 모델. 기록상 외부 유료 생성·유료 API 사용 없음.</p></div>
+    <div class="tile rv"><p class="k">최종 검수</p><p class="v"><span data-n="69">69</span><small>프레임</small></p><p>독립 검수 69프레임 · 연속 시트 7장 · 1배속 재생 480프레임 끊김 0.</p></div>
+    <div class="tile rv"><p class="k">통과 못 한 항목</p><p class="v"><span data-n="3">3</span><small>개</small></p><p>제품 조작부 · 춤 소매 · 하이파이브 반동. 숨기지 않고 기록했고, v7은 거절됐습니다.</p></div>
+  </div>
+</section>
+
+<div class="prog" style="background-color:var(--mint)"></div>
+
+<!-- 사람이 잡은 것 -->
+<section class="sec catch" id="catch">
+  <p class="eyebrow rv">Human in the loop</p>
+  <h2 class="h2 rv">AI가 틀린 것,<br>사람이 잡은 것</h2>
+  <div class="cards">
+
+    <article class="card rv">
+      <div>
+        <p class="no">C1</p>
+        <p class="src">딸깍 LIME SODA · 3D 캔</p>
+        <h3>“캔이 잼 병처럼 읽힌다”</h3>
+        <div class="step"><span class="t ai">1차</span><span>넥이 두꺼운 원통 칼라, 바닥은 흰색, 뚜껑은 깊은 컵 — 캔이 아니라 잼 병으로 보였다.</span></div>
+        <div class="step"><span class="t hu">사람</span><span>실물 단면 치수를 직접 지정: 직벽 r33, 넥 r33→27, 림 r27.5, 뚜껑 6mm 오목.</span></div>
+        <div class="step"><span class="t ok">결과</span><span>3차 검수에서 통과.</span></div>
+      </div>
+      <div class="dwg">
+        <svg viewBox="0 0 250 262" role="img" aria-label="캔 단면 치수 지정 도면: 림 r27.5, 넥 r33에서 27, 직벽 r33 z8~103, 뚜껑 6mm 오목">
+          <!-- 2px = 1mm, 바닥 y=252, 캔은 x 34~166 -->
+          <path class="cut" d="M45 32 Q100 44 155 32 M45 32 L46 34 L34 56 L34 236 Q34 250 50 252 Q100 240 150 252 Q166 250 166 236 L166 56 L154 34 L155 32"/>
+          <line class="dim" x1="100" y1="130" x2="166" y2="130"/><text class="m" x="72" y="122">r33 직벽</text>
+          <line class="dim" x1="182" y1="56" x2="182" y2="236"/><text class="m" x="188" y="150">z8~</text><text class="m" x="188" y="166">103</text>
+          <line class="dim" x1="156" y1="44" x2="200" y2="44"/><text class="y" x="160" y="22">넥 r33→27</text>
+          <line class="dim" x1="100" y1="38" x2="100" y2="50"/><text x="52" y="76">뚜껑 6mm 오목</text>
+          <text class="y" x="4" y="22">림 r27.5</text>
+        </svg>
+        <div class="pic"><img src="media/can-final.webp" alt="최종 3D 캔 렌더 — 딸깍 LIME SODA" loading="lazy"><span class="s ok">3차 통과</span></div>
+      </div>
+    </article>
+
+    <article class="card rv">
+      <div>
+        <p class="no">C2</p>
+        <p class="src">딸깍 LIME SODA · S4 라임 / S5 따르기</p>
+        <h3>“라임은 스펀지 블록, 소다는 불투명 슬라임”</h3>
+        <div class="step"><span class="t ai">S4</span><span>라임 쐐기·막대가 스펀지 블록처럼 보임(치명) → 수정본에서 실제 슬라이스로 읽혀 통과.</span></div>
+        <div class="step"><span class="t ai">S5</span><span>액체가 불투명 페인트·슬라임 같고 탄산 방울이 거의 없음 → 투명 소다·기포·거품·가는 줄기로 수정.</span></div>
+        <div class="step"><span class="t ok">결과</span><span>S5는 시험 3회차에 통과.</span></div>
+      </div>
+      <div class="pics">
+        <div class="pic"><img src="media/lime-sponge.webp" alt="수정 전: 스펀지 블록처럼 보이는 라임 조각" loading="lazy"><span class="s no">전 · 스펀지</span></div>
+        <div class="pic"><img src="media/lime-fixed.webp" alt="수정 후: 실제 슬라이스로 보이는 라임" loading="lazy"><span class="s ok">후 · 슬라이스</span></div>
+        <div class="pic"><img src="media/soda-slime.webp" alt="수정 전: 불투명한 슬라임 같은 라임 소다" loading="lazy"><span class="s no">전 · 슬라임</span></div>
+        <div class="pic"><img src="media/soda-fixed.webp" alt="수정 후: 투명한 라임 소다와 기포" loading="lazy"><span class="s ok">후 · 3회차</span></div>
+      </div>
+    </article>
+
+    <article class="card rv">
+      <div>
+        <p class="no">C3</p>
+        <p class="src">Nothing Headphone (1) Pro · 실사 → 3D</p>
+        <h3>“실사 7편 거절, 공식 사진까지 걷어냈다”</h3>
+        <div class="step"><span class="t ai">실사</span><span>AI 실사 시안 7편 — 느리고, 장소만 바뀌고, 제품과 변화의 인과가 없음.</span></div>
+        <div class="step"><span class="t hu">사람</span><span>제품 조작이 주인공인 3D 모션그래픽으로 전환. 실사판 8편(v6·v7·5편·City Beat)의 공식 제품 사진 구간은 직접 만든 엔드카드·3D로 교체.</span></div>
+        <div class="step"><span class="t ok">결과</span><span>교체한 13편(향수 포함)을 0.5초 간격으로 전부 다시 훑어 남은 공식 사진 0.</span></div>
+      </div>
+      <div class="pics">
+        <div class="pic x">공식 제품 사진 구간<span>게시하지 않음 · 교체 전</span><span class="s no">전</span></div>
+        <div class="pic"><img src="media/endcard-3d.webp" alt="직접 만든 3D 헤드폰 엔드카드 — 비공식 콘셉트 표기 포함" loading="lazy"><span class="s ok">후 · 직접 만든 3D</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<div class="marq" style="--c:var(--pink)" aria-hidden="true"><span>REJECT → REWRITE → ADOPT · 붉게 펼쳐지다 · v4 → v5 · REJECT → REWRITE → ADOPT · 붉게 펼쳐지다 · v4 → v5 · </span><span>REJECT → REWRITE → ADOPT · 붉게 펼쳐지다 · v4 → v5 · REJECT → REWRITE → ADOPT · 붉게 펼쳐지다 · v4 → v5 · </span></div>
+
+<!-- 작품 2: 향수 실사판 v5 -->
+<section class="sec work dark" id="work-2" style="--bg:var(--red)">
+  <div class="head rv">
+    <div>
+      <p class="eyebrow">Work 02 · AI 영상 광고</p>
+      <h2 class="title kr">붉게 펼쳐지다<small>향수 실사판 v5 · 32초</small></h2>
+      <div class="chips">
+        <span class="chip k">Carolina Herrera La Bomba Intensa</span>
+        <span class="chip">실제 브랜드의 비공식 콘셉트</span>
+        <span class="chip">AI 생성 영상 · 가상 인물</span>
+      </div>
+    </div>
+    <div class="num" aria-hidden="true">02</div>
+  </div>
+  <p class="lede rv">외출 준비 → 향수 분사 → 행사 입장. 같은 인물의 저녁을 32초로 보여 주는 AI 영상 광고예요. 버전마다 받은 피드백을 하나씩 반영해 v5까지 만들었어요.</p>
+  <div class="player rv">
+    <div class="bar2"><span><b>OUTPUT</b> · v5.mp4</span><span>1920×1080 · 24fps · 768f · 32s · 11컷</span></div>
+    <video class="film" src="../../media/perfume-film/v5.mp4" poster="../../media/perfume-film/v5-poster.jpg" controls muted playsinline loop preload="metadata"></video>
+  </div>
+  <p class="fcap rv">v5 32초 · 1920×1080 · 소리 있음 — AI 생성 영상, 공식 제품 사진 구간은 직접 만든 3D 병 그림으로 교체</p>
+</section>
+
+<section class="sec proof" id="proof-2" style="--pbg:#FFD1E8">
+  <p class="eyebrow rv">Process evidence · 02</p>
+  <h2 class="h2 rv">v4는 거절,<br>v5는 다시 찍었다</h2>
+  <div class="cmp rv">
+    <img src="media/perfume-v5-adopt.webp" alt="채택: v5 — 드레스 차림으로 입장하고 손님들이 돌아보는 장면 (AI 생성 가상 인물)">
+    <img class="bf" src="media/perfume-v4-reject.webp" alt="거절: v4 — 재킷을 걸치고 혼자 걸어 들어오는 장면 (AI 생성 가상 인물)">
+    <div class="hd" aria-hidden="true"></div>
+    <span class="lb l">REJECT<span class="xl"> · v4 재킷·혼자 입장</span></span><span class="lb r">ADOPT<span class="xl"> · v5 입장→손님 반응</span></span>
+    <input type="range" min="0" max="100" value="50" aria-label="v4 거절본과 v5 채택본 비교 위치">
+  </div>
+  <div class="why rv">
+    <div class="no"><b>왜 거절됐나 · v4</b><p>사용자 시청 결과: 반복감, 분사 행위가 안 보임, 추상적인 향 연출, 재킷, 주변 반응 부족.</p></div>
+    <div class="ok"><b>무엇으로 바꿨나 · v5</b><p>병 버튼을 눌러 분사까지 보이는 샷, 같은 인물·드레스만(재킷 0), 별도 추상 향 컷 0, 입장 → 손님 반응 → 교류로 곧게 이어지는 전개.</p></div>
+  </div>
+  <div class="log">
+    <div class="tile rv"><p class="k">v5 제작</p><p class="v"><span data-n="1">1</span><small>일</small></p><p>10.16 v4 수정 요청 → 같은 날 v5 착수·32초 납품.</p></div>
+    <div class="tile rv"><p class="k">본편</p><p class="v"><span data-n="768">768</span><small>프레임</small></p><p>32초 · 1920×1080 · 24fps · 11컷</p></div>
+    <div class="tile rv"><p class="k">v5 새 생성</p><p class="v"><span data-n="15841">15,841</span><small>초</small></p><p>새 테이크 7개 · 562프레임의 실제 생성 시간 합.</p></div>
+    <div class="tile rv"><p class="k">비용</p><p class="v">LOCAL</p><p>로컬 GPU의 MiniMax-H3. 기록상 새 유료 추가 0 — 금액 기록은 없음.</p></div>
+    <div class="tile rv"><p class="k">독립 검수</p><p class="v"><span data-n="38">38</span><small>표본</small></p><p>+ 근접 18프레임 연속 확인. 768프레임 전수 디코드, 1배속 재생 끊김 0, 치명 결함 0.</p></div>
+    <div class="tile rv"><p class="k">미검증으로 남긴 것</p><p class="v"><span data-n="2">2</span><small>개</small></p><p>직접 청취, 실물 노즐 형상. 분사 노즐은 생성된 시안이라고 기록했습니다.</p></div>
+  </div>
+</section>
+
+<div class="marq" style="--c:var(--sky)" aria-hidden="true"><span>PRESS · HOLD · ROLL · PADDLE · 버튼 하나에, 세상이 바뀐다 · PRESS · HOLD · ROLL · PADDLE · 버튼 하나에, 세상이 바뀐다 · </span><span>PRESS · HOLD · ROLL · PADDLE · 버튼 하나에, 세상이 바뀐다 · PRESS · HOLD · ROLL · PADDLE · 버튼 하나에, 세상이 바뀐다 · </span></div>
+
+<!-- 작품 3: 헤드폰 모션그래픽 -->
+<section class="sec work" id="work-3" style="--bg:var(--sky)">
+  <div class="head rv">
+    <div>
+      <p class="eyebrow">Work 03 · 3D 모션그래픽</p>
+      <h2 class="title kr">버튼 하나에,<br>세상이 바뀐다<small>헤드폰 모션그래픽 · 32초</small></h2>
+      <div class="chips">
+        <span class="chip k">Nothing Headphone (1) Pro</span>
+        <span class="chip">실제 브랜드의 비공식 콘셉트</span>
+        <span class="chip">제품은 Blender로 직접 모델링</span>
+      </div>
+    </div>
+    <div class="num" aria-hidden="true">03</div>
+  </div>
+  <p class="lede rv">롤러를 누르고, 길게 누르고, 돌리고, 패들을 밀 때마다 음악과 화면이 바뀌는 32초 모션그래픽. 재생 버튼으로 시작해 일시정지 버튼으로 끝나요.</p>
+  <div class="player rv">
+    <div class="bar2"><span><b>OUTPUT</b> · nothing-headphone-ad-v1-1080p.mp4</span><span>1920×1080 · 24fps · 768f · 32s</span></div>
+    <video class="film" src="../../media/headphone/nothing-headphone-ad-v1-1080p.mp4" poster="../../media/headphone/film-poster.jpg" controls muted playsinline loop preload="metadata"></video>
+  </div>
+  <p class="fcap rv">32초 본편 · 1920×1080 · 소리 있음</p>
+</section>
+
+<section class="sec proof" id="proof-3">
+  <p class="eyebrow rv">Process evidence · 04</p>
+  <h2 class="h2 rv">두 번 거절당하고<br>규칙을 찾았다</h2>
+  <div class="cmp rv">
+    <img src="media/hp-motion-adopt.webp" alt="채택: 모션그래픽 본편 — 롤러를 돌리면 음량이 바뀌는 장면, 직접 만든 3D 헤드폰">
+    <img class="bf" src="media/hp-v3-reject.webp" alt="거절: 제품 단독 콘티 v3의 6번 장면 — 받침대 위 헤드폰 주위를 카메라가 도는 생성 시안 이미지">
+    <div class="hd" aria-hidden="true"></div>
+    <span class="lb l">REJECT<span class="xl"> · 제품 단독 콘티 v3</span></span><span class="lb r">ADOPT<span class="xl"> · 조작 = 장면 전환</span></span>
+    <input type="range" min="0" max="100" value="50" aria-label="제품 단독 콘티와 모션그래픽 본편 비교 위치">
+  </div>
+  <div class="why rv">
+    <div class="no"><b>왜 거절됐나</b><p>① 제품 단독 매크로·회전 콘티 v3 — 거절, 사람·사용 상황 중심으로 재기획. ② 그 뒤 AI 실사 7편 — “느리고, 장소만 바뀌고, 제품과 변화의 인과가 없다”.</p></div>
+    <div class="ok"><b>무엇으로 바꿨나</b><p>공식 매뉴얼의 조작 다섯 가지(누르기·길게·돌리기·패들·Flat 스위치)를 장면 전환의 방아쇠로. 음악 120BPM 마디에 컷을 맞췄다.</p></div>
+  </div>
+  <div class="log">
+    <div class="tile rv"><p class="k">본편</p><p class="v"><span data-n="768">768</span><small>프레임</small></p><p>32초 · 1920×1080 · 24fps (파일 실측)</p></div>
+    <div class="tile rv"><p class="k">장면</p><p class="v"><span data-n="9">9</span><small>장면</small></p><p>모두 실제 조작에서 시작.</p></div>
+    <div class="tile rv"><p class="k">이퀄라이저</p><p class="v"><span data-n="16">16</span><small>대역</small></p><p>화면 이퀄라이저가 실제 믹스의 16대역을 따라간다.</p></div>
+    <div class="tile rv"><p class="k">비용</p><p class="v">LOCAL</p><p>Blender·로컬 음악 모델(ACE-Step)·ffmpeg. 금액 기록 없음.</p></div>
+    <div class="tile rv"><p class="k">거쳐 온 거절</p><p class="v"><span data-n="2">2</span><small>단계</small></p><p>제품 단독 콘티 → 사람 중심 실사 7편 → 제품 조작이 주인공.</p></div>
+    <div class="tile rv"><p class="k">검수</p><p class="v"><span data-n="768">768</span><small>프레임</small></p><p>직접 만든 3D + 2D 합성 + 음악 박자 동기화, 전 프레임 검수.</p></div>
+  </div>
+</section>
+
+<div class="marq" style="--c:var(--lime)" aria-hidden="true"><span>딸깍! · 여름이 터진다 · TTALKAK LIME SODA · 가상 브랜드 · 딸깍! · 여름이 터진다 · TTALKAK LIME SODA · 가상 브랜드 · </span><span>딸깍! · 여름이 터진다 · TTALKAK LIME SODA · 가상 브랜드 · 딸깍! · 여름이 터진다 · TTALKAK LIME SODA · 가상 브랜드 · </span></div>
+
+<!-- 작품 4: 딸깍 LIME SODA -->
+<section class="sec work" id="work-4" style="--bg:var(--lime)">
+  <div class="head rv">
+    <div>
+      <p class="eyebrow">Work 04 · 3D 모션그래픽 · 가상 브랜드</p>
+      <h2 class="title kr">딸깍, 여름이 터진다<small>TTALKAK LIME SODA</small></h2>
+      <div class="chips">
+        <span class="chip k">딸깍(TTALKAK) LIME SODA</span>
+        <span class="chip">가상 브랜드 · 판매용 아님 · 포트폴리오 콘셉트</span>
+        <span class="chip">Blender Cycles 3D</span>
+      </div>
+    </div>
+    <div class="num" aria-hidden="true">04</div>
+  </div>
+  <p class="lede rv">직접 만든 가상 탄산음료 브랜드 딸깍(TTALKAK) LIME SODA. 3D 캔과 2D 모션그래픽으로 만든 가로 20초 본편, SNS 세로 15초, 세로 포스터 2장, 브랜드 시트까지 한 세트예요.</p>
+  <div class="player rv">
+    <div class="bar2"><span><b>OUTPUT</b> · ttalkak-20s.mp4</span><span>1920×1080 · 30fps · 600f · 20s</span></div>
+    <video class="film" src="../../media/drink/ttalkak-20s.mp4" poster="../../media/drink/poster-wide.png" controls muted playsinline loop preload="metadata"></video>
+  </div>
+  <p class="fcap rv">가로 20초 본편 · 1920×1080 · 30fps · 소리 있음 — 가상 브랜드 · 판매용 아님</p>
+</section>
+
+<section class="sec proof" id="proof-4" style="--pbg:var(--sky)">
+  <p class="eyebrow rv">Process evidence · 03</p>
+  <h2 class="h2 rv">“색만 입힌 것 같다”에서<br>실물 알루미늄으로</h2>
+  <div class="cmp rv">
+    <img src="media/drink-final.webp" alt="채택: 새 실물 재질 캔 — 알루미늄 결, 크기가 제각각인 물방울, 반짝임을 줄인 조명 (본편 600프레임 중 590번)">
+    <img class="bf" src="media/drink-oldmat.webp" alt="거절: 이전 재질 캔 — 금속성 라벨과 고른 물방울 (같은 590번 프레임)">
+    <div class="hd" aria-hidden="true"></div>
+    <span class="lb l">REJECT<span class="xl"> · 이전 재질</span></span><span class="lb r">ADOPT<span class="xl"> · 실물 재질 + 조명 60%</span></span>
+    <input type="range" min="0" max="100" value="50" aria-label="이전 재질과 최종 재질 비교 위치">
+  </div>
+  <div class="why rv">
+    <div class="no"><b>왜 거절됐나</b><p>“3D 텍스처가 색만 입혀 놓은 것 같다, AI 느낌 덜 나게.” 조사해 보니 원인은 금속성 0.5 라벨·코팅, 고른 물방울, 접지감 부족. 다음 날 “캔 빤딱임 없애 줘”.</p></div>
+    <div class="ok"><b>무엇으로 바꿨나</b><p>비금속 잉크·은색 결·크기가 제각각인 물방울로 재질을 새로 짜고, 림·스트립 조명 40%·나머지 60%로 낮춰 캔이 나오는 3D 전부를 다시 렌더.</p></div>
+  </div>
+  <div class="log">
+    <div class="tile rv"><p class="k">제작 기간</p><p class="v"><span data-n="9">9</span><small>일</small></p><p>10.21 브랜드 이름 → 10.29 납품 확정. 사이 10.22~26은 작업 중단 기록.</p></div>
+    <div class="tile rv"><p class="k">프레임</p><p class="v"><span data-n="1050">1,050</span><small>장</small></p><p>가로 600(20초) + 세로 450(15초), 모두 30fps.</p></div>
+    <div class="tile rv"><p class="k">3D 전체 재렌더</p><p class="v"><span data-n="2">2</span><small>회</small></p><p>새 실물 재질 1회, 반짝임 줄인 조명 1회 — 캔이 나오는 모든 장면과 포스터.</p></div>
+    <div class="tile rv"><p class="k">비용</p><p class="v">LOCAL</p><p>Blender Cycles·ACE-Step(음악) 모두 로컬. 결제 금지 규칙, 금액 기록 없음.</p></div>
+    <div class="tile rv"><p class="k">전수 점검</p><p class="v"><span data-n="1050">1,050</span><small>프레임</small></p><p>튀는 프레임·암전·과노출 0. 음량 가로 −14.3 · 세로 −14.1 LUFS.</p></div>
+    <div class="tile rv"><p class="k">사람이 잡은 1장</p><p class="v">599<small>→600</small></p><p>재인코딩 때 마지막 1프레임이 잘린 가로 본편을 전수 점검에서 찾아 다시 인코딩.</p></div>
+  </div>
+</section>
+
+<div class="marq" style="--c:#FFB13A" aria-hidden="true"><span>퇴근 한 번 → 오늘 번 돈 → 이번 달 실수령 → 명세서 대조 → 계산 근거 · 월급햄스터 · </span><span>퇴근 한 번 → 오늘 번 돈 → 이번 달 실수령 → 명세서 대조 → 계산 근거 · 월급햄스터 · </span></div>
+
+<!-- 작품 5: 월급햄스터 -->
+<section class="sec work" id="work-5" style="--bg:#FFB13A">
+  <div class="head rv">
+    <div>
+      <p class="eyebrow">Work 05 · 앱 광고 · 세로 SNS</p>
+      <h2 class="title kr">이번 달 내 월급,<br>햄스터는 알고 있다<small>월급햄스터 · 세로 30초</small></h2>
+      <div class="chips">
+        <span class="chip k">월급햄스터</span>
+        <span class="chip">직접 만든 앱 · 출시 준비 중</span>
+        <span class="chip">화면 속 금액은 데모 데이터</span>
+      </div>
+    </div>
+    <div class="num" aria-hidden="true">05</div>
+  </div>
+  <div class="vwrap">
+    <div>
+      <p class="lede rv" style="margin-top:0">직접 만든 알바 월급 계산 앱의 광고예요. 퇴근 버튼 한 번 → 오늘 번 돈 → 이번 달 실수령 → 명세서 대조 → 계산 근거, 앱의 실제 기능 순서가 그대로 장면이 되는 세로 30초예요.</p>
+      <div class="big3 rv" style="margin-top:24px">
+        <div><b>30초</b><span>세로 본편 · 1080×1920</span></div>
+        <div><b>6초×2</b><span>SNS 범퍼</span></div>
+        <div><b>15초</b><span>가로 컷다운</span></div>
+      </div>
+    </div>
+    <div class="player v rv">
+      <div class="bar2"><span><b>OUTPUT</b> · 30s</span><span>1080×1920 · 30fps</span></div>
+      <video class="film" src="../../media/app/hamster-vertical-30s.mp4" poster="../../media/app/poster-vertical.png" controls muted playsinline loop preload="metadata"></video>
+    </div>
+  </div>
+  <p class="fcap rv">세로 30초 본편 · 1080×1920 · 소리 있음 — 화면 속 금액은 스토어용 데모 데이터</p>
+</section>
+
+<section class="sec proof" id="proof-5" style="--pbg:var(--mint)">
+  <p class="eyebrow rv">Process evidence · 05</p>
+  <h2 class="h2 rv">기준서를 통과한<br>햄스터만 움직인다</h2>
+  <div class="cmp rec rv">
+    <img src="media/hamster-pass.webp" alt="채택: 기준서를 통과해 투명하게 오린 마스코트 그림 9장">
+    <div class="bf"><q>좌우 반전 금지 · 팔레트 5색</q><small>탈락본 파일 없음 → 기준서 문구로 대신</small></div>
+    <div class="hd" aria-hidden="true"></div>
+    <span class="lb l">REJECT<span class="xl"> · 기준서 탈락</span></span><span class="lb r">ADOPT<span class="xl"> · 통과한 컷아웃</span></span>
+    <input type="range" min="0" max="100" value="50" aria-label="기준서 탈락 조건과 통과한 그림 비교 위치">
+  </div>
+  <div class="why rv">
+    <div class="no"><b>무엇을 걸러 냈나</b><p>캐릭터 기준서(좌우 반전 금지·팔레트 5색)에 맞지 않는 그림은 쓰지 않았다. 3D 없이 2D만, 기존 두 광고와 겹치지 않는 세로 광고가 목표.</p></div>
+    <div class="ok"><b>어떻게 움직였나</b><p>통과한 그림만 투명하게 오려 한 장씩 코드로 움직이는 컷아웃 애니메이션. 120BPM 박자 격자(15프레임)에 컷과 숫자 움직임을 맞췄다.</p></div>
+  </div>
+  <div class="log">
+    <div class="tile rv"><p class="k">제작 기간</p><p class="v"><span data-n="1">1</span><small>일</small></p><p>10.20 착수 → 같은 날 본편·범퍼·가로 모두 사용자 확정.</p></div>
+    <div class="tile rv"><p class="k">본편</p><p class="v"><span data-n="900">900</span><small>프레임</small></p><p>30초 · 1080×1920 · 30fps (파일 실측)</p></div>
+    <div class="tile rv"><p class="k">매체별 컷</p><p class="v"><span data-n="4">4</span><small>편</small></p><p>세로 30초 · 범퍼 6초 2개 · 가로 15초.</p></div>
+    <div class="tile rv"><p class="k">비용</p><p class="v">LOCAL</p><p>HTML·JS + 헤드리스 Chrome, Python, ffmpeg, ACE-Step. 금액 기록 없음.</p></div>
+    <div class="tile rv"><p class="k">박자 격자</p><p class="v"><span data-n="15">15</span><small>프레임</small></p><p>120BPM 한 박마다 컷과 숫자 움직임을 맞춤.</p></div>
+    <div class="tile rv"><p class="k">미검증으로 남긴 것</p><p class="v"><span data-n="2">2</span><small>개</small></p><p>소리 실제 청취, 실제 폰 재생.</p></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>모든 광고는 실제 브랜드와 관계없는 개인 비공식 콘셉트 작품입니다.</p>
+  <p>AI 생성 도구를 쓴 부분은 작품마다 따로 표기했습니다.</p>
+  <p class="mo">정윤상 · wjddbstkddla@naver.com</p>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 노드 연결선: 노드 위치에서 곡선을 계산 (크기가 바뀌면 다시 그림)
+  const g = document.getElementById('graph'), svg = document.getElementById('wires');
+  const edges = [['n-p','n-g'],['n-g','n-r'],['n-r','n-g',1],['n-r','n-c'],['n-b','n-c'],['n-s','n-c'],['n-c','n-o']];
+  function port(r, side){ return side==='r'?[r.right,r.cy]:side==='l'?[r.left,r.cy]:side==='t'?[r.cx,r.top]:[r.cx,r.bottom]; }
+  function draw(){
+    const o = g.getBoundingClientRect();
+    const R = id => { const b = document.getElementById(id).getBoundingClientRect();
+      return {left:b.left-o.left,right:b.right-o.left,top:b.top-o.top,bottom:b.bottom-o.top,cx:(b.left+b.right)/2-o.left,cy:(b.top+b.bottom)/2-o.top}; };
+    let html = '';
+    edges.forEach(([a,b,back],i) => {
+      const A = R(a), B = R(b); let d;
+      if (back) { // 검수 탈락 → 생성으로 되돌아가는 고리 (위로 휘어짐)
+        const [x1,y1] = port(A,'t'), [x2,y2] = port(B,'t'), h = 44;
+        d = `M${x1-10} ${y1}C${x1-10} ${y1-h} ${x2+10} ${y2-h} ${x2+10} ${y2}`;
+      } else {
+        const dx = B.cx-A.cx, dy = B.cy-A.cy, hz = Math.abs(dx) >= Math.abs(dy)*0.9;
+        const [x1,y1] = port(A, hz?(dx>0?'r':'l'):(dy>0?'b':'t')), [x2,y2] = port(B, hz?(dx>0?'l':'r'):(dy>0?'t':'b'));
+        const k = hz ? Math.max(30,Math.abs(x2-x1)*.5) : Math.max(24,Math.abs(y2-y1)*.5);
+        d = hz ? `M${x1} ${y1}C${x1+Math.sign(dx)*k} ${y1} ${x2-Math.sign(dx)*k} ${y2} ${x2} ${y2}`
+               : `M${x1} ${y1}C${x1} ${y1+Math.sign(dy)*k} ${x2} ${y2-Math.sign(dy)*k} ${x2} ${y2}`;
+      }
+      html += `<path class="w" d="${d}"/><path class="pk${back?' back':''}" pathLength="100" style="--d:${(i*.3).toFixed(1)}s" d="${d}"/>`;
+    });
+    svg.innerHTML = html;
+  }
+  new ResizeObserver(draw).observe(g);
+  document.fonts && document.fonts.ready.then(draw);
+  // 노드가 튀어나오는 동안(크기 변환) 위치가 흔들리지 않도록 끝난 뒤 한 번 더
+  setTimeout(draw, 2200);
+
+  // 검수 도장 + 출력 테이크 교체(노이즈 → 선명)
+  const stamp = document.getElementById('stamp');
+  const imgs = [...document.querySelectorAll('#view img')], nz = document.querySelector('#view .noise'), no = document.getElementById('takeno');
+  let t = 0, k = 0;
+  if (!reduce) setInterval(() => {
+    t++;
+    const pass = t % 2 === 0;
+    stamp.textContent = pass ? 'PASS' : 'REJECT';
+    stamp.className = 'stamp hit ' + (pass ? 'ok' : 'no');
+    if (pass) {
+      imgs[k].classList.remove('on'); k = (k+1) % imgs.length; imgs[k].classList.add('on');
+      no.textContent = `TAKE ${k+1}/${imgs.length}`;
+      nz.classList.remove('go'); void nz.getBoundingClientRect(); nz.classList.add('go');
+    }
+  }, 1600);
+
+  // 스크롤 등장 + 숫자 올라가기
+  const fmt = n => n.toLocaleString('en-US');
+  const count = el => { const end = +el.dataset.n, t0 = performance.now(), dur = 1200;
+    const step = now => { const p = Math.min(1,(now-t0)/dur); el.textContent = fmt(Math.round(end*(1-Math.pow(1-p,3)))); if (p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step); };
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); io.unobserve(e.target);
+    if (!reduce) e.target.querySelectorAll('[data-n]').forEach(count);
+    if (e.target.classList.contains('cmp') && !reduce) e.target.sweep();
+  }), {threshold:.18});
+
+  // 비교 슬라이더 (처음 보일 때 한 번 좌우로 쓸어 보여 줌) — 작품마다 하나씩
+  document.querySelectorAll('.cmp').forEach(cmp => {
+    const rng = cmp.querySelector('input');
+    const set = v => { cmp.style.setProperty('--x', v + '%'); rng.value = v; };
+    let touched = false;
+    rng.addEventListener('input', () => { touched = true; set(rng.value); });
+    cmp.sweep = () => {
+      const keys = [[0,50],[700,82],[1500,18],[2200,50]], t0 = performance.now();
+      const step = now => { if (touched) return; const e = now-t0;
+        for (let i=1;i<keys.length;i++) if (e <= keys[i][0]) { const [a,va]=keys[i-1],[b,vb]=keys[i], p=(e-a)/(b-a), s=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; set(va+(vb-va)*s); return requestAnimationFrame(step); }
+        set(50); };
+      requestAnimationFrame(step);
+    };
+  });
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+  // 본편들: 화면에 보일 때만 무음 자동 재생 (동작 줄이기면 자동 재생 안 함)
+  if (!reduce) { const vo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.play().catch(()=>{}); else e.target.pause(); }), {threshold:.4});
+    document.querySelectorAll('video.film').forEach(v => vo.observe(v)); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+/* 케이스 스터디 전용 (body.home.case). home.css 위에 얹는다. 장면마다 --c(바탕) --t(글자) --s(윤곽) --p(사선 면) --pt(사선 면 위 글자) */
+.topbar{position:fixed;z-index:90;top:12px;left:12px;display:flex;gap:10px;align-items:center}
+.topbar .mark{position:static}
+.topbar .bk{background:var(--sun)}
+
+.cs{display:grid;grid-template-columns:46vw minmax(0,1fr);align-items:center;background:var(--c);color:var(--t)}
+.cs.r{grid-template-columns:minmax(0,1fr) 46vw}
+.cs::before{content:"";position:absolute;top:0;bottom:0;right:0;width:58vw;background:var(--p);clip-path:polygon(16% 0,100% 0,100% 100%,0 100%)}
+.cs.r::before{right:auto;left:0;clip-path:polygon(0 0,84% 0,100% 100%,0 100%)}
+.cs.r .tx{grid-column:2;grid-row:1;margin-left:0}
+.cs.r .cs-vid,.cs.r .cs-fig{grid-column:1;grid-row:1;justify-self:start;margin:0 0 0 4vw}
+.cs .tx{padding:calc(var(--u)*5) 6vw calc(var(--u)*4) 4vw}
+.cs.r .tx{padding:calc(var(--u)*5) 4vw calc(var(--u)*4) 6vw}
+.cs .top{display:flex;align-items:center;gap:calc(var(--u)*1.4);flex-wrap:wrap}
+.cs .no{font-size:calc(var(--u)*5.2);color:transparent;-webkit-text-stroke:2.5px var(--s)}
+.cs h1,.cs h2{font-size:calc(var(--u)*5);margin:calc(var(--u)*.9) 0 calc(var(--u)*.7)}
+.cs .brand{font-size:max(18px,calc(var(--u)*1.8));letter-spacing:.06em;text-transform:uppercase;font-weight:700;margin-bottom:calc(var(--u)*1)}
+.cs .lede{font-size:max(17px,calc(var(--u)*1.35));font-weight:600;max-width:32em}
+
+/* 영상 카드 (히어로·다음 작품) */
+.cs-vid{position:relative;z-index:2;justify-self:end;margin-right:4vw;width:min(46vw,calc(76svh*16/9))}
+.cs-vid video{width:100%;aspect-ratio:16/9;object-fit:cover;border:6px solid #fff;box-shadow:10px 10px 0 #111;background:#111}
+.cs-vid .fcap{margin-top:16px;font-size:17px;font-weight:700;color:var(--pt)}
+a.cs-vid{display:block;text-decoration:none}
+a.cs-vid:hover video{translate:-3px -3px;box-shadow:13px 13px 0 #111}
+.cs-vid video{transition:translate .2s,box-shadow .2s}
+.cs-vid video.tall{aspect-ratio:9/16;width:auto;height:min(76svh,760px);max-width:100%;margin:0 auto;object-fit:contain}
+
+/* 숫자 띠 */
+.cs-st{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:calc(var(--u)*3);padding:8svh 5vw}
+.cs-st::before{display:none}
+.cs-st .kick{color:#111;align-self:center}
+.cs-sg{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));width:100%;max-width:1300px}
+.cs-sg>div{padding:0 2vw;border-left:5px solid var(--t);min-width:0}
+.cs-sg>div:first-child{border-left:0}
+.cs-sg b{display:block;line-height:1;white-space:nowrap}
+.cs-sg b .an{font-size:calc(var(--u)*13);-webkit-text-stroke:0}
+.cs-sg b .han{font-size:calc(var(--u)*4.4);margin-left:.15em}
+.cs-sg span.l{display:block;font-size:max(18px,calc(var(--u)*1.5));font-weight:700;line-height:1.4;margin-top:calc(var(--u)*1)}
+
+/* 과정 장면 */
+.cs-step h2{font-size:calc(var(--u)*4.6)}
+.cs-step .lede{font-weight:600}
+.cs-fig{position:relative;z-index:2;justify-self:end;margin-right:4vw;max-width:46vw}
+.cs-fig img{display:block;width:auto;height:auto;max-width:100%;max-height:66svh;border:6px solid #fff;box-shadow:10px 10px 0 #111;background:#fff}
+.cs-fig .fcap{margin-top:16px;font-size:17px;font-weight:700;color:var(--pt)}
+.cs-step.nt{grid-template-columns:minmax(0,1fr)}
+.cs-step.nt::before{display:none}
+.cs-step.nt .tx{width:62vw;padding:calc(var(--u)*5) 0 calc(var(--u)*5) 4vw}
+.cs-step.nt .lede{font-size:max(19px,calc(var(--u)*1.7));max-width:30em}
+.cs-step.nt h2{font-size:calc(var(--u)*6.4)}
+.cs-step .big{position:absolute;right:3vw;top:50%;translate:0 -50%;font-size:calc(var(--u)*30);line-height:.85;color:transparent;-webkit-text-stroke:4px var(--s);pointer-events:none}
+.cs-step.nt.r .big{right:auto;left:3vw}
+.cs-step.nt.r .tx{margin-left:auto;padding:calc(var(--u)*5) 4vw calc(var(--u)*5) 0}
+
+/* 갤러리 */
+.gal .head{padding-top:calc(var(--u)*6)}
+
+/* 내가 한 일 · 도구 */
+.cs-info{display:flex;flex-direction:column;justify-content:center;gap:calc(var(--u)*2);padding:9svh 5vw 8svh;align-items:flex-start}
+.cs-info::before{display:none}
+.cs-cols{display:grid;grid-template-columns:1fr 1fr;gap:5vw;width:100%}
+.cs-info h2{font-size:calc(var(--u)*5.4);margin:0 0 calc(var(--u)*1.2)}
+.cs-info .tgs{gap:12px}
+.cs-info .tg{font-size:20px;padding:5px 16px;box-shadow:4px 4px 0 #111}
+.cs-info .pt{margin:0;max-width:60em}
+.cs-info .fine{font-size:17px;font-weight:600;max-width:60em}
+
+/* 다음 작품 */
+.cs-nx .no{font-size:calc(var(--u)*5.2)}
+.cs .cta{color:#111}
+.cs-step.nt0 h2{font-size:calc(var(--u)*7.2)}
+
+@media (max-width:860px){
+ .topbar{top:8px;left:8px;gap:6px}
+ .topbar .mark{font-size:13px;padding:3px 9px}
+ .cs,.cs.r{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:8svh 5vw 2svh}
+ .cs::before,.cs.r::before{display:none}
+ .cs .tx,.cs.r .tx{padding:0;margin:0}
+ .cs .no{font-size:34px;-webkit-text-stroke-width:2px}
+ .cs .top .tg:not(.live){display:none}
+ .cs h1,.cs h2{font-size:9.4vw;margin:4px 0 4px}
+ .cs .brand{font-size:17px;margin-bottom:6px}
+ .cs .lede{font-size:16px;line-height:1.5}
+ .cs-vid,.cs.r .cs-vid{width:auto;margin:14px 0 0;justify-self:auto}
+ .cs-vid video{border-width:4px;box-shadow:6px 6px 0 #111}
+ .cs-vid .fcap,.cs-fig .fcap{font-size:16px;margin-top:10px;color:var(--t)}
+ .cs-fig,.cs.r .cs-fig{margin:14px 0 0;max-width:none;justify-self:auto;align-self:flex-start}
+ .cs-fig img{max-height:30svh;border-width:4px;box-shadow:6px 6px 0 #111}
+ .cs-st{padding:9svh 5vw 4svh;gap:3svh;justify-content:center}
+ .cs-sg{grid-template-columns:1fr;gap:2.2svh}
+ .cs-sg>div{border-left:0;border-top:4px solid var(--t);padding:1.4svh 0 0}
+ .cs-sg>div:first-child{border-top:0;padding-top:0}
+ .cs-sg b{display:flex;align-items:baseline;gap:6px}
+ .cs-sg b .an{font-size:15vw}
+ .cs-sg b .han{font-size:7vw}
+ .cs-sg span.l{font-size:17px;margin-top:2px}
+ .cs-step.nt{justify-content:center}
+ .cs-step.nt .tx,.cs-step.nt.r .tx{width:auto;padding:0}
+ .cs-step.nt h2{font-size:10vw}
+ .cs-step.nt .lede{font-size:17px}
+ .cs-step .big,.cs-step.nt.r .big{right:-2vw;left:auto;top:auto;bottom:-2svh;translate:none;font-size:42vw;opacity:.5}
+ .cs-info{padding:9svh 5vw 3svh;gap:2.4svh}
+ .cs-cols{grid-template-columns:1fr;gap:2.4svh}
+ .cs-info h2{font-size:8vw;margin-bottom:8px}
+ .cs-info .tg{font-size:16px;padding:2px 10px;box-shadow:3px 3px 0 #111}
+ .cs-info .tgs{gap:8px}
+ .cs-info .fine{font-size:16px;line-height:1.45}
+ .gal .head{padding-top:8svh}
+}
+@media (max-width:860px) and (max-height:700px){
+ .cs-fig img{max-height:24svh}
+}
+
+/* 영상 모음 — 가로로 넘기는 카드 */
+.cs-films::before{display:none}
+.cs-films{display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:24px;padding:72px 0 40px}
+.cs-films .head{padding:0 var(--gx,48px)}
+.fl-row{width:100%;max-width:100vw;box-sizing:border-box;display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gx,48px);padding:8px var(--gx,48px) 20px;scrollbar-width:thin}
+.fl-card{flex:0 0 min(560px,82vw);scroll-snap-align:start;margin:0}
+.fl-card video{width:100%;aspect-ratio:16/9;object-fit:contain;background:#111;border:5px solid #fff;box-shadow:8px 8px 0 #111;display:block}
+.fl-card.v{flex-basis:min(300px,62vw,30svh)}
+.fl-card.v video{aspect-ratio:9/16}
+.fl-card figcaption{margin-top:12px;display:flex;flex-direction:column;gap:4px}
+.fl-card figcaption b{font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:22px}
+.fl-card figcaption span{font-size:16px;opacity:.85}

@@ -1,0 +1,69 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>모션·3D 스튜디오용 — 광고·모션그래픽 포트폴리오</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%23FFE600%27/%3E%3Cpath d=%27M11 8l14 8-14 8z%27 fill=%27%23111%27/%3E%3C/svg%3E"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600;700&family=Syne:wght@700;800&display=swap"><meta name="robots" content="noindex"><style>
+@page{size:A4 landscape;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#1B1E4B;--pink:#FF3D8B;--sun:#FFE600}
+html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font:400 16px/1.55 'IBM Plex Sans KR',sans-serif;color:var(--ink);word-break:keep-all}
+img{display:block}
+.han{font-family:'Black Han Sans',sans-serif;font-weight:400;line-height:1.08}
+.an{font-family:'Anton',sans-serif;font-weight:400;line-height:1}
+.pg{width:297mm;height:210mm;position:relative;overflow:hidden;break-after:page;background:var(--c,#fff);color:var(--t,var(--ink))}
+.pg:last-child{break-after:auto}
+.tgs{display:flex;flex-wrap:wrap;gap:8px}
+.tg{display:inline-block;background:#fff;color:#111;border:2px solid #111;padding:1px 12px;font-size:15px;font-weight:600;line-height:1.5}
+.kick{display:inline-block;background:#fff;color:var(--ink);border:2px solid var(--ink);padding:1px 16px;font-size:16px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.vn .han{margin-left:.12em}
+
+/* 표지: 하늘 그라데이션(선형) + 원근 회전목마 */
+.cover{background:linear-gradient(180deg,#7CCBFF 0%,#B8D8FF 30%,#FFC2DC 66%,#FFF0A8 100%)}
+.cover .ct{position:absolute;left:64px;right:64px;top:50px}
+.cover h1{font-size:92px;margin:18px 0 14px;text-shadow:.045em .045em 0 #fff}
+.cover h1 span{display:block}.cover h1 span+span{color:var(--pink)}
+.cover .gr{font-size:20px;font-weight:600;max-width:34em}
+.cover .fc{margin-top:12px}
+.st3{position:absolute;left:0;right:0;bottom:0;height:300px}
+.fl3{position:absolute;left:50%;top:60%;width:980px;height:490px;margin:-245px 0 0 -490px;transform:rotateX(72deg);border-radius:50%;
+ background:linear-gradient(90deg,rgba(255,255,255,.75),rgba(255,61,139,.22),rgba(47,140,255,.25),rgba(255,230,0,.35),rgba(255,255,255,.75));border:4px solid rgba(255,255,255,.9)}
+.rg3{position:absolute;left:50%;top:38%;width:0;height:0}
+.cd3{position:absolute;left:0;top:0;width:290px;border:5px solid #fff;border-radius:8px;background:#fff;box-shadow:0 14px 24px rgba(27,30,75,.3);overflow:hidden}
+.cd3 img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+
+/* 작품 쪽: 사선으로 나뉜 원색 면 + 커버 이미지 면 */
+.wk .im{position:absolute;top:0;bottom:0;right:0;width:48%;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);background:var(--p)}
+.wk .im img{width:100%;height:100%;object-fit:cover}
+.wk .im.tall{background:#fff}.wk .im.tall img{object-fit:contain}
+.wk .tx{position:absolute;left:62px;top:0;bottom:0;width:480px;display:flex;flex-direction:column;justify-content:center;padding:28px 0}
+.wk .no{font-size:84px;color:transparent;-webkit-text-stroke:2.5px var(--s)}
+.wk .tx>.tgs{margin:4px 0 8px}
+.wk h2{font-size:44px;margin:4px 0 4px}
+.wk .br{font-size:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.wk .ld{font-size:16px;font-weight:600;margin-bottom:14px}
+.wk .stt{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:0;border-top:4px solid var(--t);padding-top:10px;margin-bottom:14px}
+.wk .stt>div{padding:0 12px;border-left:3px solid var(--t);min-width:0}
+.wk .stt>div:first-child{padding-left:0;border-left:0}
+.wk .stt b{display:block;line-height:1;white-space:nowrap}
+.wk .stt b .an{font-size:44px}
+.wk .stt b .han{font-size:20px}
+.wk .stt span.l{display:block;font-size:14px;font-weight:600;line-height:1.35;margin-top:4px}
+.wk .pt{background:var(--sun);color:#111;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:6px 14px;font-size:15px;font-weight:700;margin-bottom:12px}
+.wk .pt small{display:block;font-size:14px;font-weight:600;opacity:.75}
+.wk .rl{font-size:15px;font-weight:600}
+
+/* 다음 작품 쪽 */
+.nx .pn{position:absolute;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;background:var(--c);color:var(--t)}
+.nx .pn.a{left:0;width:100%}
+.nx .pn.b{right:0;width:60%;clip-path:polygon(30% 0,100% 0,100% 100%,0 100%)}
+.nx .pn .in{width:400px}
+.nx .pn.a .in{margin-left:64px}
+.nx .pn.b .in{margin-left:auto;margin-right:58px}
+.nx .pn .no{font-size:64px;color:transparent;-webkit-text-stroke:2.5px var(--t)}
+.nx .pn h2{font-size:48px;margin:12px 0 10px}
+.nx .pn .ld{font-size:18px;font-weight:600;margin-top:10px}
+
+/* 연락 쪽 */
+.end{background:var(--sun);color:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.end h1{font-size:104px;margin-bottom:26px}
+.end h1 span{display:block}
+.end .tg{font-size:20px;padding:6px 26px;box-shadow:5px 5px 0 #111}
+.end .foot{position:absolute;left:0;right:0;bottom:28px;font-size:15px;font-weight:600;line-height:1.5;padding:0 40px}
+</style></head><body><section class="pg cover"><div class="ct"><span class="kick">모션·3D 스튜디오용</span><h1 class="han"><span>제품이 움직이면,</span><span>광고가 된다</span></h1><p class="gr">직접 모델링한 3D 제품과 2D 모션그래픽 합성, 음악 박자에 맞춘 편집을 중심으로 골랐어요.</p><p class="fc"><span class="tg">3D · 합성 · 브레이크다운</span></p></div><div class="st3"><div class="rg3"><div class="cd3" style="transform:translate(-50%,-50%) translateX(-510px) translateZ(0) perspective(900px) rotateY(51deg) scale(1);z-index:7"><img src="../../media/headphone/film-cover.webp" width="810" height="1080" alt="버튼 하나에, 세상이 바뀐다 커버"></div><div class="cd3" style="transform:translate(-50%,-50%) translateX(-170px) translateZ(0) perspective(900px) rotateY(17deg) scale(1.14);z-index:9"><img src="../../media/headphone-film/v7-poster.webp" width="1280" height="720" alt="OWN YOUR TEMPO — 실사판 커버"></div><div class="cd3" style="transform:translate(-50%,-50%) translateX(170px) translateZ(0) perspective(900px) rotateY(-17deg) scale(1.14);z-index:9"><img src="../../media/perfume-motion/style-s2.webp" width="1600" height="900" alt="붉게 펼쳐지다 커버"></div><div class="cd3" style="transform:translate(-50%,-50%) translateX(510px) translateZ(0) perspective(900px) rotateY(-51deg) scale(1);z-index:7"><img src="../../media/app/poster-wide.webp" width="1600" height="900" alt="이번 달 내 월급, 햄스터는 알고 있다 커버"></div></div></div></section><section class="pg wk" style="--c:#E8372C;--t:#fff;--s:#fff;--p:#EEF0F3"><div class="im tall"><img src="../../media/headphone/film-cover.webp" width="810" height="1080" alt="버튼 하나에, 세상이 바뀐다 커버"></div><div class="tx"><span class="no an">01</span><div class="tgs"><span class=tg>테크·가전</span><span class=tg>3D·모션그래픽 광고</span><span class=tg>콘티·프리비즈</span><span class=tg>리듬·테크</span></div><h2 class="han">버튼 하나에, 세상이 바뀐다</h2><p class="br">Nothing Headphone (1) Pro</p><p class="ld">롤러를 누르고, 길게 누르고, 돌리고, 패들을 밀 때마다 음악과 화면이 바뀌는 32초 모션그래픽. 재생 버튼으로 시작해 일시정지 버튼으로 끝나요.</p><div class="stt" style="--n:3"><div><b class="vn"><span class="an">32</span><span class="han">초</span></b><span class="l">1080p 본편 · 768프레임</span></div><div><b class="vn"><span class="an">9</span><span class="han">장면</span></b><span class="l">모두 실제 조작에서 시작</span></div><div><b class="vn"><span class="an">16</span><span class="han">대역</span></b><span class="l">소리를 따라가는 이퀄라이저</span></div></div><p class="pt"><small>주목할 점</small>직접 만든 3D 제품 + 2D 합성 + 음악 박자 동기화, 768프레임 전 프레임 검수</p><p class="rl">내가 한 일 · 콘셉트·콘티 · 3D 모델링·카메라 (Blender) · 2D 모션그래픽 합성 · 사운드 믹스 · 전 프레임 검수</p></div></section><section class="pg wk" style="--c:#2F6BFF;--t:#fff;--s:#fff;--p:#EEF3FF"><div class="im"><img src="../../media/headphone-film/v7-poster.webp" width="1280" height="720" alt="OWN YOUR TEMPO — 실사판 커버"></div><div class="tx"><span class="no an">02</span><div class="tgs"><span class=tg>테크·가전</span><span class=tg>AI 영상 광고</span><span class=tg>콘티·프리비즈</span><span class=tg>인물·스토리</span></div><h2 class="han">OWN YOUR TEMPO — 실사판</h2><p class="br">Nothing Headphone (1) Pro</p><p class="ld">헤드폰을 쓴 한 사람의 하루를 20초로 담은 AI 영상 광고 시안이에요. 거리·계단·옥상, 레코드점·인쇄소·세탁소·기차·농구장까지 장소와 이야기를 바꿔 가며 7편을 만들었고, 이 과정에서 얻은 결론으로 모션그래픽 본편을 다시 만들었어요.</p><div class="stt" style="--n:3"><div><b class="vn"><span class="an">7</span><span class="han">편</span></b><span class="l">20초 · 1280×720 편집본</span></div><div><b class="vn"><span class="an">25</span><span class="han">개</span></b><span class="l">5편 묶음 생성 테이크</span></div><div><b class="vn"><span class="an">32</span><span class="han">초</span></b><span class="l">City Beat 프리비즈</span></div></div><p class="pt"><small>주목할 점</small>로컬 생성 영상 파이프라인과 Blender 카메라 프리비즈</p><p class="rl">내가 한 일 · 기획·콘티 · AI 영상 생성 운영 (로컬 MiniMax-H3) · 편집·음악 선택 · 버전별 피드백 반영</p></div></section><section class="pg wk" style="--c:#D3123E;--t:#fff;--s:#fff;--p:#FBEFEA"><div class="im"><img src="../../media/perfume-motion/style-s2.webp" width="1600" height="900" alt="붉게 펼쳐지다 커버"></div><div class="tx"><span class="no an">03</span><div class="tgs"><span class=tg>뷰티·향수</span><span class=tg>3D·모션그래픽 광고</span><span class=tg>콘티·프리비즈</span><span class=tg>럭셔리·감성</span></div><h2 class="han">붉게 펼쳐지다</h2><p class="br">Carolina Herrera La Bomba Intensa</p><p class="ld">한 방울의 붉은 향이 실크 리본처럼 펼쳐져 나비형 병이 되고, 분사 한 번에 화면 전체가 붉은 나비로 번지는 32초 모션그래픽. 병의 &#x27;접힌 날개&#x27; 구조를 모션의 규칙으로 썼어요.</p><div class="stt" style="--n:3"><div><b class="vn"><span class="an">32</span><span class="han">초</span></b><span class="l">본편 v1 · 768프레임</span></div><div><b class="vn"><span class="an">16</span><span class="han">마디</span></b><span class="l">9장면 콘티</span></div><div><b class="vn"><span class="an">6</span><span class="han">초</span></b><span class="l">시험본 (승인)</span></div></div><p class="pt"><small>주목할 점</small>제품 형태를 모션 규칙으로 바꾼 3D·2D 혼합 연출, 직접 설계한 유리 병</p><p class="rl">내가 한 일 · 콘셉트·콘티 · 3D 병 모델링 (Blender) · 2D 모션그래픽 합성 · 검수</p></div></section><section class="pg wk" style="--c:#2FBF8C;--t:#111;--s:#111;--p:#FFF6E6"><div class="im"><img src="../../media/app/poster-wide.webp" width="1600" height="900" alt="이번 달 내 월급, 햄스터는 알고 있다 커버"></div><div class="tx"><span class="no an">04</span><div class="tgs"><span class=tg>앱·서비스</span><span class=tg>SNS 세로 컷</span><span class=tg>콘티·프리비즈</span><span class=tg>UI·키네틱 타이포</span></div><h2 class="han">이번 달 내 월급, 햄스터는 알고 있다</h2><p class="br">월급햄스터 (직접 만든 앱, 출시 준비 중)</p><p class="ld">직접 만든 알바 월급 계산 앱의 광고예요. 퇴근 버튼 한 번 → 오늘 번 돈 → 이번 달 실수령 → 명세서 대조 → 계산 근거, 앱의 실제 기능 순서가 그대로 장면이 되는 세로 30초예요.</p><div class="stt" style="--n:3"><div><b class="vn"><span class="an">30</span><span class="han">초</span></b><span class="l">세로 본편 · 1080×1920</span></div><div><b class="vn"><span class="an">6</span><span class="han">초×2</span></b><span class="l">SNS 범퍼</span></div><div><b class="vn"><span class="an">15</span><span class="han">초</span></b><span class="l">가로 컷다운</span></div></div><p class="pt"><small>주목할 점</small>3D 없이 2D 컷아웃 캐릭터 + UI 모션 + 키네틱 타이포를 박자 격자에 맞춘 연출</p><p class="rl">내가 한 일 · 콘셉트·콘티 · 2D 컷아웃 애니메이션 · UI 모션·키네틱 타이포 · 합성·편집 · 사운드</p></div></section><section class="pg wk" style="--c:#B0123A;--t:#fff;--s:#fff;--p:#FFE9EE"><div class="im tall"><img src="../../media/perfume-film/keyvisual-v1.webp" width="1122" height="1402" alt="붉게 펼쳐지다 — 실사판 커버"></div><div class="tx"><span class="no an">05</span><div class="tgs"><span class=tg>뷰티·향수</span><span class=tg>AI 영상 광고</span><span class=tg>키비주얼·포스터</span><span class=tg>콘티·프리비즈</span><span class=tg>인물·스토리</span></div><h2 class="han">붉게 펼쳐지다 — 실사판</h2><p class="br">Carolina Herrera La Bomba Intensa</p><p class="ld">외출 준비 → 향수 분사 → 행사 입장. 같은 인물의 저녁을 32초로 보여 주는 AI 영상 광고예요. 버전마다 받은 피드백을 하나씩 반영해 v5까지 만들었어요.</p><div class="stt" style="--n:3"><div><b class="vn"><span class="an">32</span><span class="han">초</span></b><span class="l">1080p · 768프레임 · 11컷</span></div><div><b class="vn"><span class="an">5</span><span class="han">버전</span></b><span class="l">피드백 반영 반복</span></div><div><b class="vn"><span class="an">12</span><span class="han">개</span></b><span class="l">직접 합성한 효과음</span></div></div><p class="pt"><small>주목할 점</small>로컬 생성 모델 파이프라인 운영과 버전별 수정 기록</p><p class="rl">내가 한 일 · 기획·콘티 · AI 영상 생성 운영 (로컬 MiniMax-H3) · 편집·효과음 합성·믹스 · 버전별 피드백 반영</p></div></section><section class="pg wk" style="--c:#8BE000;--t:#111;--s:#111;--p:#F1FFD0"><div class="im"><img src="../../media/drink/poster-wide.webp" width="1600" height="900" alt="딸깍, 여름이 터진다 커버"></div><div class="tx"><span class="no an">06</span><div class="tgs"><span class=tg>음료·식품</span><span class=tg>3D·모션그래픽 광고</span><span class=tg>SNS 세로 컷</span><span class=tg>키비주얼·포스터</span><span class=tg>상큼·발랄</span></div><h2 class="han">딸깍, 여름이 터진다</h2><p class="br">딸깍(TTALKAK) LIME SODA — 가상 브랜드 · 판매용 아님 · 포트폴리오 콘셉트</p><p class="ld">직접 만든 가상 탄산음료 브랜드 딸깍(TTALKAK) LIME SODA. 3D 캔과 2D 모션그래픽으로 만든 가로 20초 본편, SNS 세로 15초, 세로 포스터 2장, 브랜드 시트까지 한 세트예요.</p><div class="stt" style="--n:3"><div><b class="vn"><span class="an">20</span><span class="han">초</span></b><span class="l">가로 본편 · 1920×1080 · 30fps</span></div><div><b class="vn"><span class="an">15</span><span class="han">초</span></b><span class="l">세로 SNS · 1080×1920 · 30fps</span></div><div><b class="vn"><span class="an">2</span><span class="han">장</span></b><span class="l">세로 포스터 · 2160×2700</span></div></div><p class="pt"><small>주목할 점</small>Blender Cycles 실물 재질 3D 캔 + 2D 모션그래픽 합성</p><p class="rl">내가 한 일 · 가상 브랜드 기획 · 3D 캔 재질·조명 · 2D 모션그래픽 합성 · 가로·세로 편집 · 포스터·브랜드 시트</p></div></section><section class="pg end"><h1 class="han"><span>다음 광고를</span><span>같이 만들어요</span></h1><span class="tg">정윤상 · wjddbstkddla@naver.com</span><div class="foot"><p>모든 광고는 실제 브랜드와 관계없는 개인 비공식 콘셉트 작품입니다.</p><p>AI 생성 도구를 쓴 부분은 작품마다 따로 표기했습니다.</p></div></section></body></html>
